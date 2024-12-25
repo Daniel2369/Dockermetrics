@@ -25,18 +25,25 @@ With microservices and containers becoming the norm, it’s critical to ensure t
 
 I automated the entire stack setup using Docker Compose to ensure that this system can be replicated and scaled easily.
 
-### **Setup Steps** (Coming Soon)
+### **Setup Steps**
 
+**Note**: You need any container for monitoring for test you can pull Redis, # docker pull redis.
 - **Step 1**: Clone this repository
-- **Step 2**: Configure Docker Compose files
-- **Step 3**: Start the services using Docker Compose
-- **Step 4**: Access Prometheus and Grafana dashboards
+- **Step 2**: Run docker ps -> copy cAdvisor container id -> run: docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_id> -> save the IP address.
+- **Step 2**: Inside prometheus.yml -> paste the IP address inside targets key.
+- **Step 3**: Run docker-compose up -d - to start docker, then run docker ps to check if the containers are up.
+- **Step 4**: Open in the browser the services:
+              1. http://localhost:3000 - Grafana (username&password admin)
+              2. http://localhost:9090 - Prometheus
+              3. http://localhost:8080 - cAdvisor
+- **Step 5**: Inside Prometheus UI -> Status -> Target health - check that the IP and port are correct towards cAdvisor and UP in green.
+- **Step 6**: Inside cAdvisor UI -> /dockers -> any containers id that you want to monitor (this is the full id) you can compare with the short id from running docker ps in the terminal. save the entry /docker/full_id
+- **Step 7**: Inside Grafana UI -> Connections -> Data sources -> Select Prometheus and under the URL enter: http://host.docker.internal:9090 save & test.
+- **Step 8**: Upload the json inside Dashboards.
+- **Step 9**: Edit each visulization and replace the container id in the query with the one you copies from step 6. save.
 
-_You will be able to monitor your containerized applications and visualize performance data in real-time._
-
-### **Setup Explanation** (To be added)
-
-_This section will contain detailed instructions on how to configure and run this monitoring stack, including how to connect Prometheus to cAdvisor, set up Grafana dashboards, and access all the metrics._
+- **Result** Now you have 2 visulizations 1 for CPU and 1 for RAM usage that you can monitor for any container that you run with.
+- For more queries check Prometheus DOCS.
 
 ## 📊 Key Benefits:
 
